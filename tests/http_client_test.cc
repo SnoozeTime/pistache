@@ -22,7 +22,8 @@ TEST(request_builder, multiple_send_test) {
     const std::string address = "localhost:9080";
 
     Http::Endpoint server(address);
-    auto server_opts = Http::Endpoint::options().threads(1);
+    auto flags = Tcp::Options::ReuseAddr;
+    auto server_opts = Http::Endpoint::options().flags(flags).threads(1);
     server.init(server_opts);
     server.setHandler(Http::make_handler<HelloHandler>());
     server.serveThreaded();
