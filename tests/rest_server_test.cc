@@ -10,6 +10,7 @@
 #include <pistache/router.h>
 #include <pistache/endpoint.h>
 
+#include "test_utils.h"
 #include "httplib.h"
 
 using namespace std;
@@ -56,7 +57,12 @@ private:
 };
 
 TEST(rest_server_test, basic_test) {
-    Port port(9090);
+
+    uint16_t port_nb = Pistache::Test::find_port();
+    if (port_nb == 0) {
+        FAIL() << "Could not find a free port. Abord test.\n";
+    }
+    Port port(port_nb);
     int thr = 1;
 
     Address addr(Ipv4::any(), port);
@@ -69,7 +75,7 @@ TEST(rest_server_test, basic_test) {
     cout << "Cores = " << hardware_concurrency() << endl;
     cout << "Using " << thr << " threads" << endl;
 
-    httplib::Client client("localhost", 9090);
+    httplib::Client client("localhost", port_nb);
     auto res = client.Get("/read/function1");
     ASSERT_EQ(res->status, 200);
     ASSERT_EQ(res->body, "1");
