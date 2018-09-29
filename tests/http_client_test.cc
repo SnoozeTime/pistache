@@ -5,6 +5,7 @@
 #include <pistache/endpoint.h>
 
 #include <chrono>
+#include "test_utils.h"
 
 using namespace Pistache;
 
@@ -19,10 +20,17 @@ struct HelloHandler : public Http::Handler {
 };
 
 TEST(request_builder, multiple_send_test) {
-    const std::string address = "localhost:9080";
+    uint16_t port_nb = Pistache::Test::find_port();
+    if (port_nb == 0) {
+        FAIL() << "Could not find a free port. Abord test.\n";
+    }
+    std::stringstream ss;
+    ss << "localhost:" << port_nb;
+    const std::string address = ss.str();
 
     Http::Endpoint server(address);
-    auto server_opts = Http::Endpoint::options().threads(1);
+    auto flags = Tcp::Options::ReuseAddr;
+    auto server_opts = Http::Endpoint::options().flags(flags).threads(1);
     server.init(server_opts);
     server.setHandler(Http::make_handler<HelloHandler>());
     server.serveThreaded();

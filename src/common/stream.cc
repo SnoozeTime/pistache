@@ -142,11 +142,12 @@ match_raw(const void* buf, size_t len, StreamCursor& cursor) {
     if (cursor.remaining() < len)
         return false;
 
+    auto offset = cursor.offset();
     if (memcmp(cursor.offset(), buf, len) == 0) {
         cursor.advance(len);
         return true;
     }
-
+    
     return false;
 }
 
