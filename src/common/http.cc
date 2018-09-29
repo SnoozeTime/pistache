@@ -213,7 +213,9 @@ namespace Private {
             request->version_ = Version::Http11;
         }
         else {
-            raise("Encountered invalid HTTP version");
+            std::stringstream ss;
+            ss << "Encountered invalid HTTP version: " << ver;
+            raise(ss.str().c_str());
         }
 
         if (!cursor.advance(2)) return State::Again;
@@ -235,7 +237,9 @@ namespace Private {
         else if (match_raw("HTTP/1.0", sizeof("HTTP/1.0") - 1, cursor)) {
         }
         else {
-            raise("Encountered invalid HTTP version");
+            std::stringstream ss;
+            ss << "Encountered invalid HTTP version: " << cursor.offset();
+            raise(ss.str().c_str());
         }
 
         int n;

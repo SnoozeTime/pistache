@@ -147,9 +147,7 @@ match_raw(const void* buf, size_t len, StreamCursor& cursor) {
         cursor.advance(len);
         return true;
     }
-
-    std::cerr << offset << std::endl;
-
+    
     return false;
 }
 
