@@ -1,7 +1,7 @@
 language: cpp
 sudo: required
 dist: trusty
-script: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make
+script: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DPISTACHE_BUILD_EXAMPLES=true -DPISTACHE_BUILD_TESTS=true .. && make && make test
 compiler:
     - clang
     - gcc-5
